@@ -160,8 +160,8 @@ func (h *userHandler) UploadAvatar(c *gin.Context) {
 		return
 	}
 
-	//harusnya dapat dari JWT
-	userID := 1
+	currentUser := c.MustGet("currentUser").(user.User)
+	userID := currentUser.ID
 
 	//images/"namafile"
 	//path := "images/" + file.Filename
@@ -188,7 +188,7 @@ func (h *userHandler) UploadAvatar(c *gin.Context) {
 	}
 
 	data := gin.H{"is_uploaded": true}
-	response := helper.APIResponse("Avatar successfully uploaded", http.StatusOK, "error", data)
+	response := helper.APIResponse("Avatar successfully uploaded", http.StatusOK, "success", data)
 
 	c.JSON(http.StatusOK, response)
 }
