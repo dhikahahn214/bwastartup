@@ -27,24 +27,29 @@ func main() {
 
 	userRepository := user.NewRepository(db)
 	campaignRepository := campaign.NewRepository(db)
-	campaigns, err := campaignRepository.FindByUserID(1)
 
-	fmt.Println("debug")
-	fmt.Println("debug")
-	fmt.Println("debug")
-	fmt.Println(len(campaigns))          // mencetak banyaknya campaign dalam db
-	for _, campaign := range campaigns { //mencetak nama campaign dalam db
-		fmt.Println(campaign.Name)
-		if len(campaign.CampaignImages) > 0 { // mencetak image dari db campaign_images
-			fmt.Println(campaign.CampaignImages[0].FileName)
-		}
-	}
+	// ##### memeriksa campaign sesuai dengan db, dengan memanggil nama dan image #####
+	// campaigns, err := campaignRepository.FindByUserID(1)
+	// fmt.Println("debug")
+	// fmt.Println("debug")
+	// fmt.Println("debug")
+	// fmt.Println(len(campaigns))          // mencetak banyaknya campaign dalam db
+	// for _, campaign := range campaigns { //mencetak nama campaign dalam db
+	// 	fmt.Println(campaign.Name)
+	// 	if len(campaign.CampaignImages) > 0 { // mencetak image dari db campaign_images
+	// 		fmt.Println(campaign.CampaignImages[0].FileName)
+	// 	}
+	// }
+	// ##### end #####
 
 	userService := user.NewService(userRepository)
 	authService := auth.NewService()
-
+	campaignService := campaign.NewService(campaignRepository)
 	userHandler := handler.NewUserHandler(userService, authService)
 	//userService.SaveAvatar(1, "images/1-profile.png")
+
+	campaigns, _ := campaignService.FindCampaigns(2)
+	fmt.Println(len(campaigns))
 
 	router := gin.Default()
 	api := router.Group("/api/v1")
