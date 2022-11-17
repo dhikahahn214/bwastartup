@@ -18,6 +18,7 @@ type Service interface {
 	GetTransactionByUserID(userID int) ([]Transaction, error) // tangkap user_id dari JWT/MiddleWare
 	CreateTransaction(input CreateTransactionInput) (Transaction, error)
 	ProcessPayment(input TransactionNotificationInput) error
+	GetAllTransaction() ([]Transaction, error)
 }
 
 func NewService(repository Repository, campaignRepository campaign.Repository, paymentService payment.Service) *service {
@@ -126,4 +127,13 @@ func (s *service) ProcessPayment(input TransactionNotificationInput) error {
 	}
 
 	return nil
+}
+
+func (s *service) GetAllTransaction() ([]Transaction, error) {
+	transaction, err := s.repository.FindAll()
+	if err != nil {
+		return transaction, err
+	}
+
+	return transaction, nil
 }
